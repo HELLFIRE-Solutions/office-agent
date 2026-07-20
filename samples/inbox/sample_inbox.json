@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "sender": "prospect@example-corp.com",
+    "subject": "Interested in a demo of your AI Office module",
+    "body": "Hi, we saw HELLFIRE's site and would like pricing and a demo for the office-agent module. Can someone reach out?"
+  },
+  {
+    "id": "2",
+    "sender": "partner@teta-pi.example",
+    "subject": "Question about DSGVO data residency",
+    "body": "Quick question — where is the server hosted and does it meet EU data residency requirements?"
+  },
+  {
+    "id": "3",
+    "sender": "client@active-account.example",
+    "subject": "URGENT: production down",
+    "body": "Our integration has been broken since this morning, this is critical and blocking our team."
+  },
+  {
+    "id": "4",
+    "sender": "billing@active-account.example",
+    "subject": "Overdue invoice #4521",
+    "body": "We noticed invoice #4521 is overdue, please confirm payment status."
+  },
+  {
+    "id": "5",
+    "sender": "winner@lottery-notice.example",
+    "subject": "You have won a crypto giveaway!!! unsubscribe here",
+    "body": "Claim your winning ticket now, click unsubscribe if not interested."
+  },
+  {
+    "id": "6",
+    "sender": "someone@random.example",
+    "subject": "hey",
+    "body": "just wanted to say hi"
+  }
+]

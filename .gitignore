@@ -1,8 +1,13 @@
 .env
 .env.*
+!.env.example
 *.sqlite
 *.sqlite3
 node_modules/
 __pycache__/
 *.pyc
 .DS_Store
+*.egg-info/
+.venv/
+out/
+.pytest_cache/

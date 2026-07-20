@@ -1,0 +1,23 @@
+[project]
+name = "office-agent"
+version = "0.1.0"
+description = "HELLFIRE AI Office — email triage, internal knowledge base search, document automation"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "jinja2>=3.1",
+]
+
+[project.optional-dependencies]
+llm = ["anthropic>=0.40"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+office-agent = "office_agent.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["office_agent*"]

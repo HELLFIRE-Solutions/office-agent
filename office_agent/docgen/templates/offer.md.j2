@@ -1,0 +1,32 @@
+# Offer — {{ module_name }} for {{ client.legal_name }}
+
+**Date:** {{ offer_date }}
+**Prepared for:** {{ client.legal_name }}{% if client.display_name %} ({{ client.display_name }}){% endif %}
+{%- if primary_contact %}
+**Attn:** {{ primary_contact.full_name }}{% if primary_contact.role %}, {{ primary_contact.role }}{% endif %}
+{%- endif %}
+
+## Module
+
+**{{ module_name }}** — {{ module_description }}
+
+## Commercial terms
+
+- **Contract type:** module (fixed price)
+- **Price:** {{ "%.2f"|format(fixed_price) }} {{ currency }}
+- **Start date:** {{ start_date }}
+{%- if end_date %}
+- **End date:** {{ end_date }}
+{%- endif %}
+{%- if notes %}
+
+## Notes
+
+{{ notes }}
+{%- endif %}
+
+---
+
+This offer requires sign-off from a HELLFIRE team member before it is
+considered final. Onboarding/training is a separate paid offering and is
+not included in the price above.
