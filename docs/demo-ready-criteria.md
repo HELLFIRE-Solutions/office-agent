@@ -1,8 +1,8 @@
-# Etap 1 — "Demo-ready" criteria (locked in with Bob, 2026-07-20)
+# Stage 1 — "Demo-ready" criteria (locked in with Bob, 2026-07-20)
 
 Bob confirmed: real IMAP connectivity is the target, but deliberately sequenced *after* a branded HELLFIRE mailbox exists — he wants the real inbox to be on the HELLFIRE domain, not a placeholder address, before wiring live credentials. The domain itself (`hellfiresol.com`) is already live (DNS + SSL, per `STATE.md` "Domain live" 2026-07-20) — what's still missing is an actual mail provider/mailbox on it, which is the real remaining blocker, not the domain purchase. LLM-drafted replies (vs. the raw-KB-excerpt fallback) are deferred for now — no rush on the API key.
 
-Etap 1 is demo-ready today when, running entirely offline against fixtures:
+Stage 1 is demo-ready today when, running entirely offline against fixtures:
 
 1. **Knowledge base search** — `office-agent kb search "<query>"` returns ranked, relevant excerpts from `samples/docs/` (real HELLFIRE/TETA+PI content: business model, module catalog, TETA+PI relationship) with source attribution. ✅ done, tested.
 2. **Email triage** — `office-agent triage run` classifies a fixture inbox (`samples/inbox/sample_inbox.json`) into `sales_lead` / `routine_question` / `support_escalation` / `billing` / `spam` / `unclassified`, and routes everything except `routine_question` to a human with no draft generated. ✅ done, tested.
@@ -17,7 +17,7 @@ Etap 1 is demo-ready today when, running entirely offline against fixtures:
 
 ## Compliance cross-check (per session 11's coordination note, `STATE.md` row 06)
 
-`compliance-layer/docs/legitimate-interest.md` flags that office-agent would need the same code-enforced `LegitimateInterestRecord` gate gtm-agent uses *if* its reply-drafting ever initiates contact with someone who hasn't written in first. As built, `email_triage/drafting.draft_reply()` only ever runs against an inbound `Email` already in the triage pipeline (see `pipeline.run_triage` — there is no path that drafts a message to someone who hasn't emailed first) — so per that same doc's own carve-out ("replying to an inbound email is not itself a Art. 6(1)(f) question"), Etap 1 as built does not need the gate. Revisit only if a future feature drafts outbound-initiated contact (not in scope for Etap 1 or Etap 2 as currently defined).
+`compliance-layer/docs/legitimate-interest.md` flags that office-agent would need the same code-enforced `LegitimateInterestRecord` gate gtm-agent uses *if* its reply-drafting ever initiates contact with someone who hasn't written in first. As built, `email_triage/drafting.draft_reply()` only ever runs against an inbound `Email` already in the triage pipeline (see `pipeline.run_triage` — there is no path that drafts a message to someone who hasn't emailed first) — so per that same doc's own carve-out ("replying to an inbound email is not itself a Art. 6(1)(f) question"), Stage 1 as built does not need the gate. Revisit only if a future feature drafts outbound-initiated contact (not in scope for Stage 1 or Stage 2 as currently defined).
 
 ## What "demo to Bob" looks like concretely, today
 
@@ -25,4 +25,4 @@ Run `office-agent kb search "..."` against real HELLFIRE docs, `office-agent tri
 
 ## Next trigger for this session to resume
 
-Once the domain/mailbox exists (session 02/03 territory) and Bob hands over IMAP credentials, come back to this module to run `IMAPSource` against real mail and report the result as a follow-up to this Etap 1 report, before starting Etap 2 (generic Gmail/Outlook client template).
+Once the domain/mailbox exists (session 02/03 territory) and Bob hands over IMAP credentials, come back to this module to run `IMAPSource` against real mail and report the result as a follow-up to this Stage 1 report, before starting Stage 2 (generic Gmail/Outlook client template).

@@ -1,4 +1,4 @@
-# office-agent — Architecture Decisions (Session 06, Etap 1)
+# office-agent — Architecture Decisions (Session 06, Stage 1)
 
 Status: decided in this session (2026-07-20).
 
@@ -8,7 +8,7 @@ Status: decided in this session (2026-07-20).
 
 Rationale:
 - The kickoff prompt for this session says to coordinate with rag-01 (session 07) rather than duplicate its pipeline from scratch — but rag-01 is still an unstarted scaffold (README + LICENSE only, no ingest/index code, vector DB choice between Qdrant/pgvector still open) as of this session. There is nothing to depend on yet.
-- Rather than block Etap 1 on rag-01, or build a throwaway embeddings pipeline that would just get replaced, this module implements the smallest thing that's genuinely useful today: BM25 lexical search over the HELLFIRE/TETA+PI doc corpus. Zero external dependencies, zero API key, zero network call, works offline, and is good enough for a small (tens-to-low-hundreds of documents) internal corpus.
+- Rather than block Stage 1 on rag-01, or build a throwaway embeddings pipeline that would just get replaced, this module implements the smallest thing that's genuinely useful today: BM25 lexical search over the HELLFIRE/TETA+PI doc corpus. Zero external dependencies, zero API key, zero network call, works offline, and is good enough for a small (tens-to-low-hundreds of documents) internal corpus.
 - The interface is deliberately narrow and stable: `ingest_directory(path) -> RawChunk[]`, `BM25Index.from_raw_chunks(...)`, `index.search(query, top_k)`. When rag-01 ships an embedding index worth depending on, swap the implementation behind this interface — `email_triage.drafting` and the CLI only touch `BM25Index.search()`, so the swap shouldn't ripple outward.
 - Chunking strategy (Markdown heading split, then paragraph split with a max-chars cap) lives in `knowledge_base/ingest.py`, separated from the index itself, so it can also be reused as-is if/when the retrieval backend changes.
 
@@ -39,7 +39,7 @@ Rationale:
 **Decision: `email_triage/sources.py` implements a real `IMAPSource` (stdlib `imaplib` + `email`, IMAP4_SSL) against a single hardcoded mailbox via env vars — not a per-client, multi-tenant OAuth connector.**
 
 Rationale:
-- The kickoff prompt's Etap 1/Etap 2 split is explicit: Etap 1 is HELLFIRE using this internally; Etap 2 is the client-facing template that connects to *a client's* Gmail/Outlook. Building OAuth app registration, token refresh, and multi-provider abstraction now would be Etap 2 work done early, for a problem Etap 1 doesn't have (one mailbox, one owner).
+- The kickoff prompt's Stage 1/Stage 2 split is explicit: Stage 1 is HELLFIRE using this internally; Stage 2 is the client-facing template that connects to *a client's* Gmail/Outlook. Building OAuth app registration, token refresh, and multi-provider abstraction now would be Stage 2 work done early, for a problem Stage 1 doesn't have (one mailbox, one owner).
 - `IMAPSource` is code-complete and unit-tested against a fake IMAP connection (`tests/test_imap_source.py`) but needs `OFFICE_AGENT_IMAP_HOST/USER/PASSWORD` (e.g. a Gmail app password) in `.env` to hit a real inbox — not provisioned in this session, same "code-complete but credential-blocked" status as gtm-agent's HubSpot/SMTP integrations.
 - `JSONFileSource` remains the default and is what the test suite and `--source json` (CLI default) use — no live credentials required to verify the pipeline works end-to-end.
 
@@ -49,8 +49,8 @@ Rationale:
 
 Rationale:
 - `internal-db` (session 04) already has a real schema for clients, contacts, and contracts (module vs. people, fixed price vs. tier+monthly rate, EUR default currency). Reusing those exact field names (`legal_name`, `contract_type`, `fixed_price`, `people_tier`, `monthly_rate`, ...) means a future integration can pass a DB row straight into `render_offer()`/`render_contract()` with no translation layer, and `generate.py`'s validation (`REQUIRED_MODULE_FIELDS`, `REQUIRED_PEOPLE_FIELDS`, the `people_tier` enum check) mirrors the DB's `chk_contract_shape` CHECK constraint.
-- Output is Markdown, not PDF/docx: every generated document is explicitly a draft for human sign-off ("This offer requires sign-off from a HELLFIRE team member before it is considered final" is baked into the template), so a polished final format isn't Etap 1's bottleneck — reviewability is. PDF/docx rendering is a small addition later (e.g. via `pandoc` or `python-docx`) if/when it's actually needed for sending to a client.
+- Output is Markdown, not PDF/docx: every generated document is explicitly a draft for human sign-off ("This offer requires sign-off from a HELLFIRE team member before it is considered final" is baked into the template), so a polished final format isn't Stage 1's bottleneck — reviewability is. PDF/docx rendering is a small addition later (e.g. via `pandoc` or `python-docx`) if/when it's actually needed for sending to a client.
 
 ## Summary for Session Manager
 
-Etap 1 is code-complete and tested (21 passing tests, `office-agent` CLI installable via `pip install -e .`) using offline fixtures (`samples/docs/`, `samples/inbox/sample_inbox.json`, `samples/offer_example.json`) — no external credentials required to verify it works. Two things are genuinely blocked on Bob, not on more coding: an `ANTHROPIC_API_KEY` (for LLM-drafted replies instead of the raw-excerpt fallback) and `OFFICE_AGENT_IMAP_*` credentials (an app password for HELLFIRE's real inbox, to triage real mail instead of the fixture). See `docs/demo-ready-criteria.md`.
+Stage 1 is code-complete and tested (21 passing tests, `office-agent` CLI installable via `pip install -e .`) using offline fixtures (`samples/docs/`, `samples/inbox/sample_inbox.json`, `samples/offer_example.json`) — no external credentials required to verify it works. Two things are genuinely blocked on Bob, not on more coding: an `ANTHROPIC_API_KEY` (for LLM-drafted replies instead of the raw-excerpt fallback) and `OFFICE_AGENT_IMAP_*` credentials (an app password for HELLFIRE's real inbox, to triage real mail instead of the fixture). See `docs/demo-ready-criteria.md`.
