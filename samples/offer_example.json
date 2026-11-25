@@ -1,0 +1,18 @@
+{
+  "client": {
+    "legal_name": "Example Mittelstand GmbH",
+    "display_name": "Example Mittelstand",
+    "country_code": "DE"
+  },
+  "primary_contact": {
+    "full_name": "Anna Beispiel",
+    "role": "Head of Operations"
+  },
+  "module_name": "AI Office",
+  "module_description": "Email triage and drafting, internal knowledge base search, contract/offer document automation.",
+  "fixed_price": 12000.00,
+  "currency": "EUR",
+  "start_date": "2026-08-01",
+  "offer_date": "2026-07-20",
+  "notes": "Includes Stage 1 dogfooded feature set; onboarding billed separately."
+}
